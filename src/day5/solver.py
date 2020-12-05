@@ -1,5 +1,3 @@
-import time
-
 def read_input():
     with open("input.txt", "r") as input_file:
         return [line.strip() for line in input_file]
