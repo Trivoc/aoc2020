@@ -5,27 +5,18 @@ def read_input():
         return [line.strip() for line in input_file]
 
 
-def binary_search_row(string, low, high):
+def binary_search(string, low, high, splitter):
     if low == high:
         return low
-    if string[0] == 'F':
-        return binary_search_row(string[1:], low, (low + high) // 2)
+    if string[0] == splitter:
+        return binary_search(string[1:], low, (low + high) // 2, splitter)
     else:
-        return binary_search_row(string[1:], (low+high+1) // 2, high)
-
-
-def binary_search_col(string, low, high):
-    if low == high:
-        return low
-    if string[0] == 'L':
-        return binary_search_col(string[1:], low, (low + high) // 2)
-    else:
-        return binary_search_col(string[1:], (low+high+1) // 2, high)
+        return binary_search(string[1:], (low+high+1) // 2, high, splitter)
 
 
 def calculate_id(seat_string):
-    row = binary_search_row(seat_string[:-3], 0, 127)
-    column = binary_search_col(seat_string[-3:], 0, 7)
+    row = binary_search(seat_string[:-3], 0, 127, 'F')
+    column = binary_search(seat_string[-3:], 0, 7, 'L')
     return row * 8 + column
 
 
