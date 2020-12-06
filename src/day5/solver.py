@@ -24,8 +24,7 @@ def solve_part_1(input):
 
 def solve_part_2(input):
     ids = [calculate_id(x) for x in input]
-    missing = [x for x in range(min(ids), max(ids)) if x not in ids]
-    return missing[0]
+    return [x for x in range(min(ids), max(ids)) if x not in ids].pop()
 
 
 input = read_input_split('\n')
