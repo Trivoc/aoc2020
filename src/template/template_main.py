@@ -12,6 +12,6 @@ def solve_part_2(split_input):
 
 
 split_input = read_input_split('\n')
-print(input)
+print(split_input)
 print(f'Part 1 solution: {solve_part_1(split_input)}')
 print(f'Part 2 solution: {solve_part_2(split_input)}')
