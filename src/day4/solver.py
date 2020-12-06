@@ -1,8 +1,10 @@
 import string
 
-def read_input():
+
+def read_input(split_on):
     with open("input.txt", "r") as input_file:
-        return [line.strip() for line in input_file]
+        return input_file.read().strip().split(split_on)
+
 
 def mock_passport():
     return {
@@ -20,26 +22,18 @@ def mock_passport():
 def validate_passport(pass_in):
     mock = mock_passport()
     mock.pop('cid', None)
-    for key in mock:
-        if key not in pass_in:
-            return False
-    return True
+    return all([key in pass_in for key in mock])
 
 
 def validate_height(height_string):
     unit = height_string[-2:]
     value = int(height_string[:-2])
-    if unit == 'cm':
-        return 150 <= value <= 193
-    else:
-        return 59 <= value <= 76
-
-    return True
+    return 150 <= value <= 193 if unit == 'cm' else 59 <= value <= 76
 
 
 def validate_hair(hair_string):
     hex_digits = string.hexdigits
-    return hair_string.startswith('#') and all(list(map(lambda x: x in hex_digits, list(hair_string[1:]))))
+    return hair_string.startswith('#') and all([x in hex_digits for x in hair_string[1:]])
 
 
 def validate_eyes(eyes_string):
@@ -52,8 +46,7 @@ def validate_pid(pid_string):
 
 def validate_passport_further(pass_in):
     return (1920 <= int(pass_in['byr']) <= 2002 and
-            2010 <= int(pass_in['iyr']) <= 2020 and
-            2020 <= int(pass_in['eyr']) <= 2030 and
+            2010 <= int(pass_in['iyr']) <= 2020 <= int(pass_in['eyr']) <= 2030 and
             validate_height(pass_in['hgt']) and
             validate_hair(pass_in['hcl']) and
             validate_eyes(pass_in['ecl']) and
@@ -64,38 +57,20 @@ def to_tuple(entry):
     return tuple(entry.split(':'))
 
 
-def parse_data(lines):
-    dicts = []
-    current_passport = {}
-    for line in lines:
-        if line == '':
-            dicts.append(current_passport)
-            current_passport = {}
-        else:
-            entries = line.split(' ')
-            tuples = list(map(lambda x: tuple(x.split(':')), entries))
-            for key, value in tuples:
-                current_passport[key] = value
-    dicts.append(current_passport)
-    return dicts
+def parse_data(inp):
+    nested = ([tup.split(':') for tup in pport] for pport in [p.split() for p in inp])
+    return [{key: val for [key, val] in passport} for passport in nested]
 
 
+def solve_part_1(parsed_input):
+    return len([p for p in parsed_input if validate_passport(p)])
 
 
-
-def solve_part_1(input):
-    passports = parse_data(input)
-    print(passports)
-    print(len(passports))
-    return len(list(filter(validate_passport, passports)))
+def solve_part_2(parsed_input):
+    return len([p for p in parsed_input if validate_passport(p) and validate_passport_further(p)])
 
 
-def solve_part_2(input):
-    passports = list(filter(validate_passport, parse_data(input)))
-    return len(list(filter(validate_passport_further, passports)))
-
-
-input = read_input()
-print(input)
-print(f'Part 1 solution: {solve_part_1(input)}')
-print(f'Part 2 solution: {solve_part_2(input)}')
+split_input = read_input('\n\n')
+parsed = parse_data(split_input)
+print(f'Part 1 solution: {solve_part_1(parsed)}')
+print(f'Part 2 solution: {solve_part_2(parsed)}')
