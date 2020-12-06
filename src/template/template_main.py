@@ -3,15 +3,15 @@ def read_input_split(split_on):
         return input_file.read().strip().split(split_on)
 
 
-def solve_part_1(input):
+def solve_part_1(split_input):
     return -1
 
 
-def solve_part_2(input):
+def solve_part_2(split_input):
     return -1
 
 
-input = read_input_split('\n\n')
+split_input = read_input_split('\n')
 print(input)
-print(f'Part 1 solution: {solve_part_1(input)}')
-print(f'Part 2 solution: {solve_part_2(input)}')
+print(f'Part 1 solution: {solve_part_1(split_input)}')
+print(f'Part 2 solution: {solve_part_2(split_input)}')
