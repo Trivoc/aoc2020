@@ -7,21 +7,13 @@ def read_input(split_on):
 
 
 def solve_part_1(groups):
-    joined_groups = list(map(lambda x: x.replace('\n', ''), groups))
-    unique_no = list(map(lambda string: len(set(string)), joined_groups))
-    return sum(unique_no)
+    return sum([len(set(s)) for s in (x.replace('\n', '') for x in groups)])
 
 
 def solve_part_2(groups):
-    grouped_answers = list(map(lambda string: set(string.split('\n')), groups))
-    print(grouped_answers)
-    sum = 0
-    for answer_set in grouped_answers:
-        list_of_charsets = list(set(a) for a in answer_set)
-        intersect = reduce(lambda x, y: x.intersection(y), list_of_charsets)
-        sum += len(intersect)
-    return sum
-
+    group_sets = [[set(answers) for answers in person] for person in (s.split('\n') for s in groups)]
+    intersects = sum(len(set.intersection(*p)) for p in group_sets)
+    return intersects
 
 input = read_input('\n\n')
 print(input)
