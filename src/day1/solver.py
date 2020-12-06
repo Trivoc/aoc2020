@@ -7,11 +7,11 @@ def read_input():
 
 
 def solve_part_1(input):
-    return [int(a) * int(b) for a,b in itertools.combinations(input, 2) if int(a) + int(b) == 2020].pop()
+    return [int(a) * int(b) for a, b in itertools.combinations(input, 2) if int(a) + int(b) == 2020].pop()
 
 
 def solve_part_2(input):
-    return [int(a) * int(b) * int(c) for a,b,c in itertools.combinations(input, 3)
+    return [int(a) * int(b) * int(c) for a, b, c in itertools.combinations(input, 3)
             if int(a) + int(b) + int(c) == 2020].pop()
 
 

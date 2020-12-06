@@ -3,11 +3,11 @@ def read_input_split(split_on):
         return input_file.read().strip().split(split_on)
 
 
-def solve_part_1(split_input):
+def solve_part_1(inp):
     return -1
 
 
-def solve_part_2(split_input):
+def solve_part_2(inp):
     return -1
 
 

@@ -3,19 +3,18 @@ def read_input_split(split_on):
         return input_file.read().strip().split(split_on)
 
 
-def binary_search(string, low, high, splitter):
-    if low == high:
-        return low
-    if string[0] == splitter:
-        return binary_search(string[1:], low, (low + high) // 2, splitter)
-    else:
-        return binary_search(string[1:], (low+high+1) // 2, high, splitter)
+def convert(char):
+    return {
+        'F': '0',
+        'L': '0',
+        'B': '1',
+        'R': '1'
+    }[char]
 
 
 def calculate_id(seat_string):
-    row = binary_search(seat_string[:-3], 0, 127, 'F')
-    column = binary_search(seat_string[-3:], 0, 7, 'L')
-    return row * 8 + column
+    binary = ''.join([convert(x) for x in seat_string])
+    return int(binary, 2)
 
 
 def solve_part_1(input):

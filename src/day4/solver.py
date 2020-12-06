@@ -57,9 +57,8 @@ def to_tuple(entry):
     return tuple(entry.split(':'))
 
 
-def parse_data(inp):
-    nested = ([tup.split(':') for tup in pport] for pport in [p.split() for p in inp])
-    return [{key: val for [key, val] in passport} for passport in nested]
+def parse_data(input):
+    return [dict(tup.split(':') for tup in pport.split()) for pport in input]
 
 
 def solve_part_1(parsed_input):
