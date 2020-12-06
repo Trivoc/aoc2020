@@ -32,8 +32,7 @@ def validate_height(height_string):
 
 
 def validate_hair(hair_string):
-    hex_digits = string.hexdigits
-    return hair_string.startswith('#') and all([x in hex_digits for x in hair_string[1:]])
+    return hair_string.startswith('#') and all([x in string.hexdigits for x in hair_string[1:]])
 
 
 def validate_eyes(eyes_string):
