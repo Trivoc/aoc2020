@@ -53,10 +53,6 @@ def validate_passport_further(pass_in):
             validate_pid(pass_in['pid']))
 
 
-def to_tuple(entry):
-    return tuple(entry.split(':'))
-
-
 def parse_data(input):
     return [dict(tup.split(':') for tup in pport.split()) for pport in input]
 
