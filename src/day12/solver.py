@@ -89,7 +89,6 @@ def solve_part_1(inp):
 def solve_part_2(inp):
     current = {'waypoint_relative': (10, 1), 'boat': (0, 0)}
     for instruction in inp:
-        print(instruction)
         action = instruction[0]
         value = int(instruction[1:])
         if action in ['N', 'S', 'W', 'E']:
@@ -98,7 +97,6 @@ def solve_part_2(inp):
             current['waypoint_relative'] = rotate_waypoint(action, value, current['waypoint_relative'])
         if action == 'F':
             current['boat'] = approach(value, current['waypoint_relative'], current['boat'])
-        print(current)
     return abs(current['boat'][0]) + abs(current['boat'][1])
 
 
