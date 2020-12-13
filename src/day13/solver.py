@@ -10,7 +10,6 @@ def read_input_split(split_on):
 def find_y(tuple):
     z, (rem, mod) = tuple
     y = z % mod
-    z = y % mod
     for i in range(0, mod):
         if (y * i) % mod == 1:
             y = i
