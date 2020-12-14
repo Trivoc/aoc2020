@@ -11,8 +11,7 @@ def get_mem(string):
 
 
 def masked_val(value, mask):
-    value = bin(int(value))
-    padded = ''.join(['0' for zero in range(0, 38 - len(value))]) + value[2:]
+    padded = bin(int(value))[2:].zfill(36)
     masked = []
     for i, c in enumerate(padded):
         if mask[i] != 'X':
@@ -32,8 +31,7 @@ def all_keys_r(mask):
 
 
 def all_keys(key, mask):
-    key_bin = bin(int(key))
-    padded_key = ['0' for zero in range(0, 38 - len(key_bin))] + list(key_bin[2:])
+    padded_key = list(bin(int(key))[2:].zfill(36))
     for i, c in enumerate(mask):
         if mask[i] == 'X':
             padded_key[i] = 'X'
