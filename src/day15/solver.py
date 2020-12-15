@@ -6,13 +6,12 @@ def read_input_split(split_on):
         return input_file.read().strip().split(split_on)
 
 
-def calculate_next(last_spoken, memory):
-    (last_time, before_that) = memory[last_spoken]
+def calculate_next(prev_tuple):
+    (last_time, before_that) = prev_tuple
     if before_that == 0:
         return 0
     else:
         return last_time - before_that
-
 
 
 def solve_part_1(inp, nth):
@@ -25,7 +24,7 @@ def solve_part_1(inp, nth):
         last_spoken = num
 
     for i in range(len(starting)+1, nth+1):
-        new_num = calculate_next(last_spoken, memory)
+        new_num = calculate_next(memory[last_spoken])
         if new_num not in memory.keys():
             memory[new_num] = (i, 0)
         else:
@@ -33,6 +32,7 @@ def solve_part_1(inp, nth):
             memory[new_num] = (i, last_time)
         last_spoken = new_num
     return last_spoken
+
 
 def solve_part_2(inp):
     return solve_part_1(inp, 30000000)
