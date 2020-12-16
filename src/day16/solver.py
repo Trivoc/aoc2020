@@ -112,32 +112,35 @@ def solve_part_2_2(inp):
     return my_ticket[0] * my_ticket[4] * my_ticket[7] * my_ticket[10] * my_ticket[16] * my_ticket[17]
 
 
+def outside_both_intervals(field, value):
+    return not in_interval(rules[field][0], value) and not in_interval(rules[field][1], value)
+
+
+def trim_decided(field, possibles):
+    for of, i in ((of, i) for of, i in possibles.items() if of != field and len(possibles[field]) == 1):
+        possibles[of] = [ind for ind in i if ind != possibles[field][0]]
 
 
 def solve_part_2_3(inp):
-    possibles = {}
-    print(len(inp))
-    for key in rules.keys():
-        possibles[key] = list(range(0, len(inp[0])))
-    print('possibles: ', possibles)
+    possibles = {key: list(range(0, len(inp[0]))) for key in rules.keys()}
 
     while any([len(value) != 1 for value in possibles.values()]):
         for ticket in inp:
             for index, value in enumerate(ticket):
                 for field, indices in possibles.items():
-                    if not in_interval(rules[field][0], value) and not in_interval(rules[field][1], value):
-                        if index in indices:
-                            possibles[field].remove(index)
-                        if len(possibles[field]) == 1:
-                            for of, i in ((of, i) for of, i in possibles.items() if len(i) != 1):
-                                possibles[of] = [ind for ind in i if ind != possibles[field][0]]
-    print(my_ticket)
+                    if outside_both_intervals(field, value) and index in indices:
+                        possibles[field].remove(index)
+                    trim_decided(field, possibles)
+
+
     prod = 1
     for field, indices in possibles.items():
         if 'departure' in field:
             print(my_ticket[indices[0]])
             prod = prod * int(my_ticket[indices[0]])
     return prod
+
+
 
 
 
