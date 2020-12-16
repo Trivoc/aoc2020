@@ -75,9 +75,6 @@ def solve_part_2(inp):
     return reduce(lambda a, b: a * b, [int(my_ticket[i[0]]) for f, i in possibles.items() if 'departure' in f])
 
 
-
-
-
 split_input = read_input_split('\n\n')
 
 start = time()
