@@ -1,4 +1,5 @@
 from time import time
+from functools import reduce
 
 
 def read_input_split(split_on):
@@ -50,95 +51,28 @@ def in_interval(interval, value):
     return interval[0] <= value <= interval[1]
 
 
-def solve_part_2(inp):
-    possibles = {}
-    for i, _ in enumerate(inp[0]):
-        possibles[i] = [key for key in rules.keys()]
-
-    print(inp)
-    for ticket_line in inp:
-        print("ticket: ", ticket_line)
-        for i, value in enumerate(ticket_line):
-            print(possibles[i])
-            filtered = possibles[i].copy()
-            for field in possibles[i]:
-                print(f'check: could value {value} with index {i} be valid for value field {field} with intervals {rules[field]}')
-                valid_interval_1, valid_interval_2 = rules[field]
-                if not in_interval(valid_interval_1, value) and not in_interval(valid_interval_2, value):
-                    print("no")
-                    filtered.remove(field)
-                else:
-                    print("yes")
-            possibles[i] = filtered.copy()
-            if len(filtered) == 1:
-                for key in (key for key in possibles.keys() if key not in filtered):
-                    print(filtered)
-                    if filtered[0] in possibles:
-                        possibles[key].remove(filtered[0])
-            print(filtered)
-    print(possibles)
-    return -1
-
-
-def update_possible(possibles, index, invalid_for_index):
-    for invalid in invalid_for_index:
-        if invalid in possibles[index]:
-            possibles[index].remove(invalid)
-    if len(possibles[index]) == 1:
-        for i in (pi for pi in range(0, len(possibles)) if pi != index):
-            if possibles[index][0] in possibles[i]:
-                print(f'removing {possibles[index][0]} from index {i} which has {possibles[i]}')
-                possibles[i].remove(possibles[index][0])
-
-
-def solve_part_2_2(inp):
-    possibles = {}
-    for i, _ in enumerate(inp[0]):
-        possibles[i] = [key for key in rules.keys()]
-    print([len(value) != 1 for value in possibles.values()])
-
-    while any([len(value) != 1 for value in possibles.values()]):
-        for ticket in inp:
-            for index, value in enumerate(ticket):
-                invalid_for_index = set()
-                for field in possibles[i]:
-                    if not in_interval(rules[field][0], value) and not in_interval(rules[field][1], value):
-                        # print(f'index {index} can not be the field {field} as the value is {value} and intervals for field is {rules[field]}')
-                        invalid_for_index.add(field)
-                update_possible(possibles, index, invalid_for_index)
-        print("===============")
-        for i, val in possibles.items():
-            print(i, val)
-    return my_ticket[0] * my_ticket[4] * my_ticket[7] * my_ticket[10] * my_ticket[16] * my_ticket[17]
-
-
 def outside_both_intervals(field, value):
     return not in_interval(rules[field][0], value) and not in_interval(rules[field][1], value)
 
 
-def trim_decided(field, possibles):
-    for of, i in ((of, i) for of, i in possibles.items() if of != field and len(possibles[field]) == 1):
-        possibles[of] = [ind for ind in i if ind != possibles[field][0]]
+def trim_decided(determined, possibles):
+    other_field_indices = ((of, ind) for of, ind in possibles.items() if of != determined and len(possibles[determined]) == 1)
+    for of, indices in other_field_indices:
+        possibles[of] = [ind for ind in indices if ind not in possibles[determined]]
 
 
-def solve_part_2_3(inp):
+def solve_part_2(inp):
     possibles = {key: list(range(0, len(inp[0]))) for key in rules.keys()}
 
     while any([len(value) != 1 for value in possibles.values()]):
         for ticket in inp:
-            for index, value in enumerate(ticket):
+            for index, val in enumerate(ticket):
                 for field, indices in possibles.items():
-                    if outside_both_intervals(field, value) and index in indices:
+                    if outside_both_intervals(field, val) and index in indices:
                         possibles[field].remove(index)
                     trim_decided(field, possibles)
 
-
-    prod = 1
-    for field, indices in possibles.items():
-        if 'departure' in field:
-            print(my_ticket[indices[0]])
-            prod = prod * int(my_ticket[indices[0]])
-    return prod
+    return reduce(lambda a, b: a * b, [int(my_ticket[i[0]]) for f, i in possibles.items() if 'departure' in f])
 
 
 
@@ -152,7 +86,7 @@ my_ticket = parse_ticket(split_input[1].split('\n')[1])
 valid_tickets = []
 
 solution1 = solve_part_1(split_input[2])
-solution2 = solve_part_2_3(valid_tickets)
+solution2 = solve_part_2(valid_tickets)
 stop = time()
 
 print(f'Part 1 solution: {solution1}')
