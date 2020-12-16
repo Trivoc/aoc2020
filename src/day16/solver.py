@@ -123,16 +123,14 @@ def solve_part_2_3(inp):
 
     while any([len(value) != 1 for value in possibles.values()]):
         for ticket in inp:
-            singles = set()
             for index, value in enumerate(ticket):
                 for field, indices in possibles.items():
                     if not in_interval(rules[field][0], value) and not in_interval(rules[field][1], value):
                         if index in indices:
                             possibles[field].remove(index)
                         if len(possibles[field]) == 1:
-                            singles.add(possibles[field][0])
-                            for f, i in ((f, i) for f, i in possibles.items() if len(i) != 1):
-                                possibles[f] = [i for i in i if i not in singles]
+                            for of, i in ((of, i) for of, i in possibles.items() if len(i) != 1):
+                                possibles[of] = [ind for ind in i if ind != possibles[field][0]]
     print(my_ticket)
     prod = 1
     for field, indices in possibles.items():
