@@ -28,6 +28,7 @@ def solve2(simplified):
     return prod([solve(split) for split in plus_split])
 
 
+# use a stack instead
 def isolate(expr):
     layer = 0
     first = 0
